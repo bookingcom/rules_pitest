@@ -1,5 +1,5 @@
 "Public API re-exports"
 
-def example():
-    """This is an example"""
-    pass
+load("//pitest/private:rules.bzl", _java_pitest_test = "java_pitest_test")
+
+java_pitest_test = _java_pitest_test

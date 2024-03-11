@@ -1,4 +1,5 @@
 load("@rules_java//java:defs.bzl", "java_library")
+load("@com_bookingcom_rules_pitest//pitest:defs.bzl", "java_pitest_test")
 
 java_library(
     name = "example",
@@ -12,5 +13,11 @@ java_library(
         "RecordWithCustomHashCode.java",
         "RecordWithCustomToString.java",
     ],
+    visibility = ["//:__subpackages__"],
+)
+
+filegroup(
+    name = "java_srcs",
+    srcs = glob(["*.java"]),
     visibility = ["//:__subpackages__"],
 )
