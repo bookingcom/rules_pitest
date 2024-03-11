@@ -1,0 +1,16 @@
+load("@rules_java//java:defs.bzl", "java_library")
+
+java_library(
+    name = "example",
+    srcs = [
+        "CustomRecord.java",
+        "NoDataRecord.java",
+        "NotARecord.java",
+        "PureRecord.java",
+        "RecordWithCustomConstructor.java",
+        "RecordWithCustomEquals.java",
+        "RecordWithCustomHashCode.java",
+        "RecordWithCustomToString.java",
+    ],
+    visibility = ["//:__subpackages__"],
+)

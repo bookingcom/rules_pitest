@@ -1,0 +1,20 @@
+load("@contrib_rules_jvm//java:defs.bzl", "java_test_suite")
+
+java_test_suite(
+    name = "example",
+    srcs = [
+        "BeforeAfterClassTest.java",
+        "CoveredByABeforeAfterClass.java",
+        "CoveredByJUnitThreeSuite.java",
+        "HasExcludedMethodsTestee.java",
+        "HasExcludedMethodsTesteeTest.java",
+        "JUnitParamsTest.java",
+        "LineNumbersSpanBlocks.java",
+        "TheoryTest.java",
+    ],
+    deps = [
+        "//sample-from-upstream/src/main/java/com/example",
+        "@maven//:junit_junit",
+        "@maven//:pl_pragmatists_JUnitParams",
+    ],
+)

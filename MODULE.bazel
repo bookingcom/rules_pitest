@@ -14,3 +14,25 @@ bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.4.1", dev_dependenc
 bazel_dep(name = "aspect_bazel_lib", version = "1.32.1", dev_dependency = True)
 bazel_dep(name = "buildifier_prebuilt", version = "6.1.2", dev_dependency = True)
 
+bazel_dep(name = "rules_java", version = "7.4.0")
+bazel_dep(name = "rules_jvm_external", version = "6.0")
+
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+
+maven.install(
+    artifacts = [
+        "org.pitest:pitest:1.15.8",
+        "org.pitest:pitest-entry:1.15.8",
+        "org.pitest:pitest-command-line:1.15.8",
+        "org.pitest:pitest-junit5-plugin:1.2.1"
+    ],
+    fetch_sources = False,
+    lock_file = "//:maven_install.json",
+    name = "maven_pitest"
+)
+
+use_repo(
+    maven,
+    "maven_pitest",
+    "unpinned_maven_pitest",
+)
