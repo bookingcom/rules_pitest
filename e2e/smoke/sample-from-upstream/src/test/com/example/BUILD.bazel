@@ -1,3 +1,4 @@
+load("@com_bookingcom_rules_pitest//pitest:defs.bzl", "java_pitest_test")
 load("@contrib_rules_jvm//java:defs.bzl", "java_test_suite")
 
 java_test_suite(
@@ -16,5 +17,39 @@ java_test_suite(
         "//sample-from-upstream/src/main/java/com/example",
         "@maven//:junit_junit",
         "@maven//:pl_pragmatists_JUnitParams",
+    ],
+)
+
+java_pitest_test(
+    name = "mutate",
+    srcs = [
+        "BeforeAfterClassTest.java",
+        "CoveredByABeforeAfterClass.java",
+        "CoveredByJUnitThreeSuite.java",
+        "HasExcludedMethodsTestee.java",
+        "HasExcludedMethodsTesteeTest.java",
+        "JUnitParamsTest.java",
+        "LineNumbersSpanBlocks.java",
+        "TheoryTest.java",
+        "//sample-from-upstream/src/main/java/com/example:java_srcs",
+    ],
+    args = [
+        "--verbose",
+        "--targetTests",
+        "com.example.*",
+        "--verbosity",
+        "10000",
+        "--mutableCodePaths",
+        "sample-from-upstream/src/main/java",
+        "--classPath",
+        "",
+    ],
+    src_dirs = [
+        "sample-from-upstream/src/main/java/com/example",
+    ],
+    target = ":example",
+    target_classes = ["com.example.*"],
+    runtime_deps = [
+        "@com_bookingcom_rules_pitest//pitest:org_pitest_pitest_junit5_plugin",
     ],
 )
