@@ -3,6 +3,8 @@ Add a basic smoke-test target below.
 """
 
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@bazel_gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
+
 # load("@com_bookingcom_rules_pitest//pitest:defs.bzl", "...")
 
 # Replace with a usage of your rule/macro
@@ -13,5 +15,18 @@ build_test(
     targets = [
         # targets you add above
         ":empty",
+    ],
+)
+
+# gazelle:prefix github.com/your/project
+gazelle(
+    name = "gazelle",
+    gazelle = ":gazelle_bin",
+)
+
+gazelle_binary(
+    name = "gazelle_bin",
+    languages = DEFAULT_LANGUAGES + [
+        "@contrib_rules_jvm//java/gazelle",
     ],
 )

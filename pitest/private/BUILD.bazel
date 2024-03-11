@@ -1,8 +1,18 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@rules_java//java:defs.bzl", "java_binary")
 
 bzl_library(
     name = "versions",
     srcs = ["versions.bzl"],
     visibility = ["//pitest:__subpackages__"],
+)
+
+java_binary(
+    name = "pitest-cli",
+    runtime_deps = [
+        "@maven_pitest//:org_pitest_pitest_command_line"
+    ],
+    main_class = "org.pitest.mutationtest.commandline.MutationCoverageReport",
+    visibility = ["//pitest:__subpackages__"]
 )
 
