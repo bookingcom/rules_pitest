@@ -11,12 +11,13 @@ bazel_dep(name = "rules_jvm_external", version = "6.0")
 
 bazel_dep(name = "gazelle", version = "0.35.0", dev_dependency = True, repo_name = "bazel_gazelle")
 bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.4.1", dev_dependency = True)
+bazel_dep(name = "buildifier_prebuilt", version = "6.1.2", dev_dependency = True)
 
 bazel_dep(name = "contrib_rules_jvm", version = "0.24.0")
 
 maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
-
 maven.install(
+    name = "maven",
     artifacts = [
         "org.junit.jupiter:junit-jupiter:5.6.1",
         "org.assertj:assertj-core:3.14.0",
@@ -25,14 +26,11 @@ maven.install(
         "org.mockito:mockito-junit-jupiter:3.9.0",
         "org.junit:junit-bom:5.6.1",
         "pl.pragmatists:JUnitParams:1.0.4",
-        "org.pitest:pitest:1.15.8"
+        "org.pitest:pitest:1.15.8",
     ],
     fetch_sources = False,
     lock_file = "//:maven_install.json",
-    name = "maven"
 )
-
-
 use_repo(
     maven,
     "maven",

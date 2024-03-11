@@ -2,8 +2,9 @@
 Add a basic smoke-test target below.
 """
 
-load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@bazel_gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@buildifier_prebuilt//:rules.bzl", "buildifier")
 
 # load("@com_bookingcom_rules_pitest//pitest:defs.bzl", "...")
 
@@ -28,5 +29,12 @@ gazelle_binary(
     name = "gazelle_bin",
     languages = DEFAULT_LANGUAGES + [
         "@contrib_rules_jvm//java/gazelle",
+    ],
+)
+
+buildifier(
+    name = "buildifier",
+    exclude_patterns = [
+        "./.git/*",
     ],
 )
