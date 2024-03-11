@@ -14,8 +14,3 @@ bazel_dep(name = "bazel_skylib_gazelle_plugin", version = "1.4.1", dev_dependenc
 bazel_dep(name = "aspect_bazel_lib", version = "1.32.1", dev_dependency = True)
 bazel_dep(name = "buildifier_prebuilt", version = "6.1.2", dev_dependency = True)
 
-pitest = use_extension("//pitest:extensions.bzl", "pitest")
-pitest.toolchain(pitest_version = "1.14.2")
-use_repo(pitest, "pitest_toolchains")
-
-register_toolchains("@pitest_toolchains//:all")
