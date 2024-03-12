@@ -1,4 +1,4 @@
-load("@rules_java//java:defs.bzl", "java_test")
+load("@rules_java//java:defs.bzl", "java_test", "java_common")
 
 # Common package prefixes, in the order we want to check for them
 _PREFIXES = (".com.", ".org.", ".net.", ".io.", ".ai.", ".co.", ".me.")
@@ -20,6 +20,51 @@ def _get_package_name(prefixes = []):
 
     return ""
 
+_EXTRACT_JAR_TMPL = """
+set -e;
+CWD=$(pwd);
+rm -rf {out_path};
+mkdir -p {out_path};
+cd {out_path};
+"""
+
+def _extract_jar_impl(ctx):
+    out = ctx.actions.declare_directory(ctx.label.name)
+
+    java_runtime = ctx.attr._jdk[java_common.JavaRuntimeInfo]
+    jar_path = "%s/bin/jar" % java_runtime.java_home
+
+    cmd = _EXTRACT_JAR_TMPL.format(
+        out_path = out.path,
+    )
+
+    for x in ctx.files.target:
+        cmd = "{cmd}$CWD/{jar_path} -xf $CWD/{file};\n".format(cmd = cmd, jar_path = jar_path, file=x.path)
+
+    cmd = "%srm -rf META-INF;\n" % cmd
+
+    ctx.actions.run_shell(
+        outputs = [out],
+        inputs = ctx.files.target + ctx.files._jdk,
+        mnemonic = "ExtractJar",
+        command = cmd,
+        use_default_shell_env = True,
+    )
+
+    return DefaultInfo(files=depset([out]))
+
+_extract_jar = rule(
+    implementation = _extract_jar_impl,
+    attrs = {
+        "target": attr.label_list(allow_files=True),
+        "_jdk": attr.label(
+            default = "@rules_java//toolchains:current_host_java_runtime",
+            providers = [java_common.JavaRuntimeInfo],
+            cfg = "exec",
+        ),
+    },
+)
+
 def java_pitest_test(
         name,
         test_class = None,
@@ -29,7 +74,8 @@ def java_pitest_test(
         srcs = [],
         src_dirs = [],
         data = [],
-        target = None,
+        test_targets = [],
+        library_target = None,
         target_classes = [],
         **kwargs):
     """Runs pitest test using Bazel.
@@ -52,26 +98,50 @@ def java_pitest_test(
     else:
         clazz = _get_package_name(package_prefixes) + name
 
+
+
     src_dirs = [native.package_name()] + src_dirs
+
+    _extract_jar(
+        name = "%s-classes" % name,
+        target = [ library_target ]
+    )
+
+    _extract_jar(
+        name = "%s-test-classes" % name,
+        target = ["%s.jar" % x for x in test_targets],
+        testonly = True,
+    )
+
 
     args = list(args)
     args += [
         "--reportDir",
-        "report-dir",
+        "$$TEST_UNDECLARED_OUTPUTS_DIR",
         "--sourceDirs",
         ",".join(src_dirs),
         "--targetClasses",
         ",".join(target_classes),
     ]
 
+    runtime_deps = runtime_deps + test_targets + [
+        "@com_bookingcom_rules_pitest//pitest:org_pitest_pitest_command_line",
+    ]
+
     java_test(
         name = name,
         main_class = "org.pitest.mutationtest.commandline.MutationCoverageReport",
         test_class = clazz,
-        runtime_deps = runtime_deps + [
-            "@com_bookingcom_rules_pitest//pitest:org_pitest_pitest_command_line",
+        runtime_deps = runtime_deps,
+        data = srcs + data + test_targets + [
+            library_target,
+            ":%s-classes" % name,
+            ":%s-test-classes" % name,
+            "@rules_java//toolchains:current_java_runtime",
         ],
-        data = srcs + data + [target],
         args = args,
+        jvm_flags = [
+            "-cp", "$$CLASSPATH:$(location :%s-classes):$(location :%s-test-classes)" % (name, name)
+        ],
         **kwargs
     )

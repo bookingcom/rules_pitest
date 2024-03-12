@@ -1,0 +1,21 @@
+load("@rules_java//java:defs.bzl", "java_library")
+
+# gazelle:java_module_granularity module
+# gazelle:java_test_mode file
+
+java_library(
+    name = "test-helpers",
+    testonly = True,
+    srcs = [
+        "src/test/java/com/example/test/BeforeAfterClassTests.java",
+        "src/test/java/com/example/test/CoveredByABeforeAfterClass.java",
+        "src/test/java/com/example/test/CoveredByJUnitThreeSuite.java",
+        "src/test/java/com/example/test/HasExcludedMethodsTestee.java",
+        "src/test/java/com/example/test/LineNumbersSpanBlocks.java",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@maven//:junit_junit",
+        "@maven//:org_junit_jupiter_junit_jupiter_api",
+    ],
+)

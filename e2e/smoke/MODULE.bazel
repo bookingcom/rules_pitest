@@ -19,16 +19,19 @@ maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
 maven.install(
     name = "maven",
     artifacts = [
-        "org.junit.jupiter:junit-jupiter:5.6.1",
-        "org.assertj:assertj-core:3.14.0",
-        "nl.jqno.equalsverifier:equalsverifier:3.5",
-        "org.mockito:mockito-core:3.9.0",
-        "org.mockito:mockito-junit-jupiter:3.9.0",
-        "org.junit:junit-bom:5.6.1",
-        "pl.pragmatists:JUnitParams:1.0.4",
-        "org.pitest:pitest:1.15.8",
+        "org.junit.jupiter:junit-jupiter:5.10.2",
+        "org.junit.jupiter:junit-jupiter-engine:5.10.2",
+        "org.junit.platform:junit-platform-launcher:1.10.2",
+        "org.junit.platform:junit-platform-reporting:1.10.2",
+        "org.junit.vintage:junit-vintage-engine:5.10.2",
+        "org.assertj:assertj-core:3.25.3",
+        "nl.jqno.equalsverifier:equalsverifier:3.15.8",
+        "org.mockito:mockito-core:5.11.0",
+        "org.mockito:mockito-junit-jupiter:5.11.0",
+        "org.junit:junit-bom:5.10.2",
+        "pl.pragmatists:JUnitParams:1.1.1",
     ],
-    fetch_sources = False,
+    fetch_sources = True,
     lock_file = "//:maven_install.json",
 )
 use_repo(

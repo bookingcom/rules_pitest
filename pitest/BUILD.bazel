@@ -1,13 +1,8 @@
+load("@rules_java//java:defs.bzl", "java_binary")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 
 # For stardoc to reference the files
 exports_files(["defs.bzl"])
-
-bzl_library(
-    name = "defs",
-    srcs = ["defs.bzl"],
-    visibility = ["//visibility:public"],
-)
 
 alias(
     name = "org_pitest_pitest_command_line",
@@ -19,4 +14,41 @@ alias(
     name = "org_pitest_pitest_junit5_plugin",
     actual = "@maven_pitest//:org_pitest_pitest_junit5_plugin",
     visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "org_pitest_pitest_entry",
+    actual = "@maven_pitest//:org_pitest_pitest_entry",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "org_pitest_pitest",
+    actual = "@maven_pitest//:org_pitest_pitest",
+    visibility = ["//visibility:public"],
+)
+
+java_binary(
+    name = "cli",
+    main_class = "org.pitest.mutationtest.commandline.MutationCoverageReport",
+    runtime_deps = [
+        "@maven_pitest//:org_pitest_pitest_command_line",
+    ],
+)
+
+bzl_library(
+    name = "defs",
+    srcs = ["defs.bzl"],
+    visibility = ["//visibility:public"],
+    deps = ["//pitest/private:rules"],
+)
+
+bzl_library(
+    name = "repositories",
+    srcs = ["repositories.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@bazel_tools//tools/build_defs/repo:http.bzl",
+        "@bazel_tools//tools/build_defs/repo:utils.bzl",
+    ],
 )

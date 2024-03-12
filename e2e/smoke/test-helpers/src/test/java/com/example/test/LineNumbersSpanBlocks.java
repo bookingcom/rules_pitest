@@ -1,4 +1,4 @@
-package com.example;
+package com.example.test;
 
 //@formatter:off
 public class LineNumbersSpanBlocks {

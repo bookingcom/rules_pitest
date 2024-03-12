@@ -1,4 +1,4 @@
-package com.example;
+package com.example.test;
 
 import static junitparams.JUnitParamsRunner.$;
 

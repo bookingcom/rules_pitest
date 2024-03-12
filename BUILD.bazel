@@ -1,14 +1,19 @@
-load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
+load("@bazel_gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
 load("@buildifier_prebuilt//:rules.bzl", "buildifier")
+
+# gazelle:java_test_mode suite
+# gazelle:java_maven_repository_name maven_pitest
+gazelle(
+    name = "gazelle",
+    gazelle = ":gazelle_bin",
+)
 
 gazelle_binary(
     name = "gazelle_bin",
-    languages = ["@bazel_skylib_gazelle_plugin//bzl"],
-)
-
-gazelle(
-    name = "gazelle",
-    gazelle = "gazelle_bin",
+    languages = DEFAULT_LANGUAGES + [
+        "@bazel_skylib_gazelle_plugin//bzl",
+        "@contrib_rules_jvm//java/gazelle",
+    ],
 )
 
 buildifier(

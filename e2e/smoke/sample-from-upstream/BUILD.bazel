@@ -1,0 +1,111 @@
+load("@com_bookingcom_rules_pitest//pitest:defs.bzl", "java_pitest_test")
+load("@contrib_rules_jvm//java:defs.bzl", "java_junit5_test")
+load("@rules_java//java:defs.bzl", "java_library")
+
+# gazelle:java_module_granularity module
+# gazelle:java_test_mode file
+
+java_library(
+    name = "sample-from-upstream",
+    srcs = [
+        "src/main/java/com/example/CustomRecord.java",
+        "src/main/java/com/example/NoDataRecord.java",
+        "src/main/java/com/example/NotARecord.java",
+        "src/main/java/com/example/PureRecord.java",
+        "src/main/java/com/example/RecordWithCustomConstructor.java",
+        "src/main/java/com/example/RecordWithCustomEquals.java",
+        "src/main/java/com/example/RecordWithCustomHashCode.java",
+        "src/main/java/com/example/RecordWithCustomToString.java",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+java_junit5_test(
+    name = "com_example_test_HasExcludedMethodsTesteeTest",
+    srcs = ["src/test/java/com/example/test/HasExcludedMethodsTesteeTest.java"],
+    test_class = "com.example.test.HasExcludedMethodsTesteeTest",
+    runtime_deps = [
+        "@maven//:org_junit_jupiter_junit_jupiter_engine",
+        "@maven//:org_junit_platform_junit_platform_launcher",
+        "@maven//:org_junit_platform_junit_platform_reporting",
+    ],
+    deps = [
+        ":sample-from-upstream",
+        "//test-helpers",
+        "@maven//:junit_junit",
+        "@maven//:org_junit_jupiter_junit_jupiter_api",
+        "@maven//:pl_pragmatists_JUnitParams",
+    ],
+)
+
+java_junit5_test(
+    name = "com_example_test_JUnitParamsTest",
+    srcs = ["src/test/java/com/example/test/JUnitParamsTest.java"],
+    test_class = "com.example.test.JUnitParamsTest",
+    runtime_deps = [
+        "@maven//:org_junit_jupiter_junit_jupiter_engine",
+        "@maven//:org_junit_platform_junit_platform_launcher",
+        "@maven//:org_junit_platform_junit_platform_reporting",
+    ],
+    deps = [
+        ":sample-from-upstream",
+        "//test-helpers",
+        "@maven//:junit_junit",
+        "@maven//:org_junit_jupiter_junit_jupiter_api",
+        "@maven//:pl_pragmatists_JUnitParams",
+    ],
+)
+
+java_junit5_test(
+    name = "com_example_test_TheoryTest",
+    srcs = ["src/test/java/com/example/test/TheoryTest.java"],
+    test_class = "com.example.test.TheoryTest",
+    runtime_deps = [
+        "@maven//:org_junit_jupiter_junit_jupiter_engine",
+        "@maven//:org_junit_platform_junit_platform_launcher",
+        "@maven//:org_junit_platform_junit_platform_reporting",
+    ],
+    deps = [
+        ":sample-from-upstream",
+        "//test-helpers",
+        "@maven//:junit_junit",
+        "@maven//:org_junit_jupiter_junit_jupiter_api",
+        "@maven//:pl_pragmatists_JUnitParams",
+    ],
+)
+
+java_pitest_test(
+    name = "mutate",
+    srcs = [
+        "src/main/java/com/example/CustomRecord.java",
+        "src/main/java/com/example/NoDataRecord.java",
+        "src/main/java/com/example/NotARecord.java",
+        "src/main/java/com/example/PureRecord.java",
+        "src/main/java/com/example/RecordWithCustomConstructor.java",
+        "src/main/java/com/example/RecordWithCustomEquals.java",
+        "src/main/java/com/example/RecordWithCustomHashCode.java",
+        "src/main/java/com/example/RecordWithCustomToString.java",
+    ],
+    args = [
+        "--verbose",
+        "--targetTests",
+        "com.example.*",
+        "--verbosity=TRACE",
+        "--testPlugin=junit5",
+    ],
+    library_target = ":sample-from-upstream",
+    target_classes = ["com.example.*"],
+    test_targets = [
+        ":com_example_test_HasExcludedMethodsTesteeTest",
+        ":com_example_test_JUnitParamsTest",
+        ":com_example_test_TheoryTest",
+    ],
+    runtime_deps = [
+        "//test-helpers",
+        "@com_bookingcom_rules_pitest//pitest:org_pitest_pitest_junit5_plugin",
+        "@maven//:org_junit_jupiter_junit_jupiter_api",
+        "@maven//:org_junit_jupiter_junit_jupiter_engine",
+        "@maven//:org_junit_platform_junit_platform_launcher",
+        "@maven//:org_junit_platform_junit_platform_reporting",
+    ],
+)

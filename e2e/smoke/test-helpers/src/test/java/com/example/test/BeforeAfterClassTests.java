@@ -1,13 +1,13 @@
-package com.example;
+package com.example.test;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-public class BeforeAfterClassTest {
+public class BeforeAfterClassTests {
 
-  @BeforeClass
+  @BeforeAll
   public static void doSomething() {
     // well actually do nothing except be here
   }
