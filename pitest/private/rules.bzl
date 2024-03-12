@@ -1,4 +1,6 @@
-load("@rules_java//java:defs.bzl", "java_test", "java_common")
+"rule implementation for pitest"
+
+load("@rules_java//java:defs.bzl", "java_common", "java_test")
 
 # Common package prefixes, in the order we want to check for them
 _PREFIXES = (".com.", ".org.", ".net.", ".io.", ".ai.", ".co.", ".me.")
@@ -39,7 +41,7 @@ def _extract_jar_impl(ctx):
     )
 
     for x in ctx.files.target:
-        cmd = "{cmd}$CWD/{jar_path} -xf $CWD/{file};\n".format(cmd = cmd, jar_path = jar_path, file=x.path)
+        cmd = "{cmd}$CWD/{jar_path} -xf $CWD/{file};\n".format(cmd = cmd, jar_path = jar_path, file = x.path)
 
     cmd = "%srm -rf META-INF;\n" % cmd
 
@@ -51,12 +53,12 @@ def _extract_jar_impl(ctx):
         use_default_shell_env = True,
     )
 
-    return DefaultInfo(files=depset([out]))
+    return DefaultInfo(files = depset([out]))
 
 _extract_jar = rule(
     implementation = _extract_jar_impl,
     attrs = {
-        "target": attr.label_list(allow_files=True),
+        "target": attr.label_list(allow_files = True),
         "_jdk": attr.label(
             default = "@rules_java//toolchains:current_host_java_runtime",
             providers = [java_common.JavaRuntimeInfo],
@@ -75,7 +77,7 @@ def java_pitest_test(
         src_dirs = [],
         data = [],
         test_targets = [],
-        library_target = None,
+        library_targets = [],
         target_classes = [],
         **kwargs):
     """Runs pitest test using Bazel.
@@ -90,21 +92,27 @@ def java_pitest_test(
             specified, the class name will be inferred from a combination of
             the current bazel package and the `name` attribute.
         runtime_deps: Additional runtime dependencies for the test.
-        **kwargs: Aditional flags to the test
+        args: extra args for the pitest cli
+        srcs: java source files to make available to the mutate tree
+        src_dirs: directories to enable for pitest
+        data: extra data to pass into the pitest runfiles
+        test_targets: bazel test targets that are used by pitest
+        library_targets: bazel libraries that are going to be mutated by pitest
+        target_classes: pitest targetClasses cli argument
         package_prefixes: List of prefixes for your maven targets
+        **kwargs: Aditional flags to the test
+
     """
     if test_class:
         clazz = test_class
     else:
         clazz = _get_package_name(package_prefixes) + name
 
-
-
     src_dirs = [native.package_name()] + src_dirs
 
     _extract_jar(
         name = "%s-classes" % name,
-        target = [ library_target ]
+        target = library_targets,
     )
 
     _extract_jar(
@@ -112,7 +120,6 @@ def java_pitest_test(
         target = ["%s.jar" % x for x in test_targets],
         testonly = True,
     )
-
 
     args = list(args)
     args += [
@@ -133,15 +140,15 @@ def java_pitest_test(
         main_class = "org.pitest.mutationtest.commandline.MutationCoverageReport",
         test_class = clazz,
         runtime_deps = runtime_deps,
-        data = srcs + data + test_targets + [
-            library_target,
+        data = srcs + data + test_targets + library_targets + [
             ":%s-classes" % name,
             ":%s-test-classes" % name,
             "@rules_java//toolchains:current_java_runtime",
         ],
         args = args,
         jvm_flags = [
-            "-cp", "$$CLASSPATH:$(location :%s-classes):$(location :%s-test-classes)" % (name, name)
+            "-cp",
+            "$$CLASSPATH:$(location :%s-classes):$(location :%s-test-classes)" % (name, name),
         ],
         **kwargs
     )

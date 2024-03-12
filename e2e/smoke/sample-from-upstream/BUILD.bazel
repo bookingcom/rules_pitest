@@ -93,7 +93,9 @@ java_pitest_test(
         "--verbosity=TRACE",
         "--testPlugin=junit5",
     ],
-    library_target = ":sample-from-upstream",
+    library_targets = [
+        ":sample-from-upstream",
+    ],
     target_classes = ["com.example.*"],
     test_targets = [
         ":com_example_test_HasExcludedMethodsTesteeTest",
