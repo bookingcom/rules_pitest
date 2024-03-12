@@ -124,7 +124,7 @@ def java_pitest_test(
     args = list(args)
     args += [
         "--reportDir",
-        "$$TEST_UNDECLARED_OUTPUTS_DIR",
+        "$${TEST_UNDECLARED_OUTPUTS_DIR}",
         "--sourceDirs",
         ",".join(src_dirs),
         "--targetClasses",
@@ -132,12 +132,13 @@ def java_pitest_test(
     ]
 
     runtime_deps = runtime_deps + test_targets + [
-        "@com_bookingcom_rules_pitest//pitest:org_pitest_pitest_command_line",
+        "@%s//pitest:org_pitest_pitest_command_line" % rules_pitest,
+        "@%s//pitest:cli-wrapper" % rules_pitest,
     ]
 
     java_test(
         name = name,
-        main_class = "org.pitest.mutationtest.commandline.MutationCoverageReport",
+        main_class = "com.booking.pitest.commandline.MutationCoverageReportWrapped",
         test_class = clazz,
         runtime_deps = runtime_deps,
         data = srcs + data + test_targets + library_targets + [

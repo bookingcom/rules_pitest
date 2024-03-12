@@ -36,6 +36,12 @@ java_binary(
     ],
 )
 
+alias(
+    name = "cli-wrapper",
+    actual = "//pitest/private/wrapper",
+    visibility = ["//visibility:public"],
+)
+
 bzl_library(
     name = "defs",
     srcs = ["defs.bzl"],
