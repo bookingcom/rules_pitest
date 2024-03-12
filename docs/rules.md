@@ -8,7 +8,7 @@ Public API re-exports
 
 <pre>
 java_pitest_test(<a href="#java_pitest_test-name">name</a>, <a href="#java_pitest_test-test_class">test_class</a>, <a href="#java_pitest_test-package_prefixes">package_prefixes</a>, <a href="#java_pitest_test-runtime_deps">runtime_deps</a>, <a href="#java_pitest_test-args">args</a>, <a href="#java_pitest_test-srcs">srcs</a>, <a href="#java_pitest_test-src_dirs">src_dirs</a>, <a href="#java_pitest_test-data">data</a>,
-                 <a href="#java_pitest_test-test_targets">test_targets</a>, <a href="#java_pitest_test-library_targets">library_targets</a>, <a href="#java_pitest_test-target_classes">target_classes</a>, <a href="#java_pitest_test-kwargs">kwargs</a>)
+                 <a href="#java_pitest_test-test_targets">test_targets</a>, <a href="#java_pitest_test-library_targets">library_targets</a>, <a href="#java_pitest_test-target_classes">target_classes</a>, <a href="#java_pitest_test-rules_pitest">rules_pitest</a>, <a href="#java_pitest_test-kwargs">kwargs</a>)
 </pre>
 
 Runs pitest test using Bazel.
@@ -34,6 +34,7 @@ pitest directly. The arguments are the same as used by `java_test`.
 | <a id="java_pitest_test-test_targets"></a>test_targets |  bazel test targets that are used by pitest   |  <code>[]</code> |
 | <a id="java_pitest_test-library_targets"></a>library_targets |  bazel libraries that are going to be mutated by pitest   |  <code>[]</code> |
 | <a id="java_pitest_test-target_classes"></a>target_classes |  pitest targetClasses cli argument   |  <code>[]</code> |
+| <a id="java_pitest_test-rules_pitest"></a>rules_pitest |  Alias for the rules_pitest in case you don't import as com_bookingcom_rules_pitest   |  <code>"com_bookingcom_rules_pitest"</code> |
 | <a id="java_pitest_test-kwargs"></a>kwargs |  Aditional flags to the test   |  none |
 
 
