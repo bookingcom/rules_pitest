@@ -18,14 +18,47 @@ load("@com_bookingcom_rules_pitest//pitest:repositories.bzl", "rules_pitest_depe
 
 rules_pitest_dependencies()
 
-# Fetches the contrib_rules_jvm dependencies.
-# If you want to have a different version of some dependency,
-# you should fetch it *before* calling this.
+load("@rules_java//java:repositories.bzl", "rules_java_dependencies", "rules_java_toolchains")
+
+rules_java_dependencies()
+
+rules_java_toolchains()
+
 load("@contrib_rules_jvm//:repositories.bzl", "contrib_rules_jvm_deps")
 
 contrib_rules_jvm_deps()
 
-# Now ensure that the downloaded deps are properly configured
 load("@contrib_rules_jvm//:setup.bzl", "contrib_rules_jvm_setup")
 
 contrib_rules_jvm_setup()
+
+load("@rules_jvm_external//:repositories.bzl", "rules_jvm_external_deps")
+
+rules_jvm_external_deps()
+
+load("@rules_jvm_external//:setup.bzl", "rules_jvm_external_setup")
+
+rules_jvm_external_setup()
+
+load("@com_bookingcom_rules_pitest//pitest:deps.bzl", pitest_maven_dependencies = "maven_dependencies")
+
+pitest_maven_dependencies()
+
+load("@rules_jvm_external//:defs.bzl", "maven_install")
+
+maven_install(
+    name = "maven",
+    artifacts = [
+        "org.junit.jupiter:junit-jupiter:5.10.2",
+        "org.junit.jupiter:junit-jupiter-engine:5.10.2",
+        "org.junit.platform:junit-platform-launcher:1.10.2",
+        "org.junit.platform:junit-platform-reporting:1.10.2",
+        "junit:junit:4.13.2",
+        "pl.pragmatists:JUnitParams:1.1.1",
+    ],
+    fetch_sources = False,
+    repositories = [
+        "https://maven.google.com",
+        "https://repo1.maven.org/maven2",
+    ],
+)
