@@ -3,3 +3,9 @@ common --java_language_version=17
 common --tool_java_runtime_version=remotejdk_17
 common --tool_java_language_version=17
 test --test_output=errors
+common  --incompatible_strict_action_env
+common --verbose_failures
+build --output_filter=DONT_MATCH_ANYTHING
+build --incompatible_allow_tags_propagation
+fetch --incompatible_allow_tags_propagation
+query --incompatible_allow_tags_propagation

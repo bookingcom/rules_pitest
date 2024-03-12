@@ -1,4 +1,4 @@
-package com.example;
+package com.example.test;
 
 public class CoveredByJUnitThreeSuite {
 

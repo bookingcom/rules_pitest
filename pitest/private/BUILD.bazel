@@ -5,3 +5,10 @@ bzl_library(
     srcs = ["versions.bzl"],
     visibility = ["//pitest:__subpackages__"],
 )
+
+bzl_library(
+    name = "rules",
+    srcs = ["rules.bzl"],
+    visibility = ["//pitest:__subpackages__"],
+    deps = ["@rules_java//java:defs"],
+)

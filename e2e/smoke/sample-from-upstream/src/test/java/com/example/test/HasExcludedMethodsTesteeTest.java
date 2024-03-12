@@ -12,12 +12,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-package com.example;
+package com.example.test;
 
-public class HasExcludedMethodsTestee {
+import static org.junit.Assert.assertEquals;
 
-  public static int excludeMe(final int i) {
-    return i + 1;
+import org.junit.Test;
+
+public class HasExcludedMethodsTesteeTest {
+
+  @Test
+  public void testExcludedMethod() {
+    assertEquals(11, HasExcludedMethodsTestee.excludeMe(10));
   }
 
 }
