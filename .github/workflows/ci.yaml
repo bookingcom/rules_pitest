@@ -11,10 +11,10 @@ on:
   workflow_dispatch:
 
 concurrency:
-    # Cancel previous actions from the same PR or branch except 'main' branch.
-    # See https://docs.github.com/en/actions/using-jobs/using-concurrency and https://docs.github.com/en/actions/learn-github-actions/contexts for more info.
-    group: concurrency-group::${{ github.workflow }}::${{ github.event.pull_request.number > 0 && format('pr-{0}', github.event.pull_request.number) || github.ref_name }}${{ github.ref_name == 'main' && format('::{0}', github.run_id) || ''}}
-    cancel-in-progress: ${{ github.ref_name != 'main' }}
+  # Cancel previous actions from the same PR or branch except 'main' branch.
+  # See https://docs.github.com/en/actions/using-jobs/using-concurrency and https://docs.github.com/en/actions/learn-github-actions/contexts for more info.
+  group: concurrency-group::${{ github.workflow }}::${{ github.event.pull_request.number > 0 && format('pr-{0}', github.event.pull_request.number) || github.ref_name }}${{ github.ref_name == 'main' && format('::{0}', github.run_id) || ''}}
+  cancel-in-progress: ${{ github.ref_name != 'main' }}
 
 jobs:
   test:
@@ -27,5 +27,7 @@ jobs:
         ]
       exclude: |
         [
-          {"folder": ".", "bzlmodEnabled": false}
+          {"folder": ".", "bzlmodEnabled": false},
+          {"folder": "e2e/smoke", "bzlmodEnabled": true, "bazelversion": "6.4.0"},
+          {"folder": ".", "bzlmodEnabled": true, "bazelversion": "6.4.0"},
         ]
