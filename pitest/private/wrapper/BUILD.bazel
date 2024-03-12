@@ -1,0 +1,18 @@
+load("@rules_java//java:defs.bzl", "java_binary", "java_library")
+
+# gazelle:java_module_granularity module
+# gazelle:java_test_mode file
+
+java_library(
+    name = "wrapper",
+    srcs = ["src/main/java/com/booking/pitest/commandline/MutationCoverageReportWrapped.java"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@maven_pitest//:org_pitest_pitest_command_line"],
+)
+
+java_binary(
+    name = "MutationCoverageReportWrapped",
+    main_class = "com.booking.pitest.commandline.MutationCoverageReportWrapped",
+    visibility = ["//visibility:public"],
+    runtime_deps = [":wrapper"],
+)
