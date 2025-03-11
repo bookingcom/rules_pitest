@@ -2,8 +2,8 @@
 
 module(
     name = "com_bookingcom_rules_pitest",
-    version = "0.0.0",
-    compatibility_level = 1,
+    version = "v0.0.1",
+    compatibility_level = 6,
 )
 
 bazel_dep(name = "bazel_skylib", version = "1.4.1")
