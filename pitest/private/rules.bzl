@@ -79,7 +79,7 @@ def java_pitest_test(
         test_targets = [],
         library_targets = [],
         target_classes = [],
-        rules_pitest = "com_bookingcom_rules_pitest",
+        rules_pitest = "rules_pitest",
         **kwargs):
     """Runs pitest test using Bazel.
 
@@ -101,7 +101,7 @@ def java_pitest_test(
         library_targets: bazel libraries that are going to be mutated by pitest
         target_classes: pitest targetClasses cli argument
         package_prefixes: List of prefixes for your maven targets
-        rules_pitest: Alias for the rules_pitest in case you don't import as com_bookingcom_rules_pitest
+        rules_pitest: Alias for the rules_pitest in case you don't import as rules_pitest
         **kwargs: Aditional flags to the test
 
     """
