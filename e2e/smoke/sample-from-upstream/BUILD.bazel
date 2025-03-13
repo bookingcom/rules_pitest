@@ -1,4 +1,4 @@
-load("@com_bookingcom_rules_pitest//pitest:defs.bzl", "java_pitest_test")
+load("@rules_pitest//pitest:defs.bzl", "java_pitest_test")
 load("@contrib_rules_jvm//java:defs.bzl", "java_junit5_test")
 load("@rules_java//java:defs.bzl", "java_library")
 
@@ -104,10 +104,10 @@ java_pitest_test(
     ],
     runtime_deps = [
         "//test-helpers",
-        "@com_bookingcom_rules_pitest//pitest:org_pitest_pitest_junit5_plugin",
         "@maven//:org_junit_jupiter_junit_jupiter_api",
         "@maven//:org_junit_jupiter_junit_jupiter_engine",
         "@maven//:org_junit_platform_junit_platform_launcher",
         "@maven//:org_junit_platform_junit_platform_reporting",
+        "@rules_pitest//pitest:org_pitest_pitest_junit5_plugin",
     ],
 )

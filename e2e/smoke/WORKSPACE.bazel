@@ -1,6 +1,6 @@
 # Override http_archive for local testing
 local_repository(
-    name = "com_bookingcom_rules_pitest",
+    name = "rules_pitest",
     path = "../..",
 )
 
@@ -14,7 +14,7 @@ local_repository(
 # you should fetch it *before* calling this.
 # Alternatively, you can skip calling this function, so long as you've
 # already fetched all the dependencies.
-load("@com_bookingcom_rules_pitest//pitest:repositories.bzl", "rules_pitest_dependencies")
+load("@rules_pitest//pitest:repositories.bzl", "rules_pitest_dependencies")
 
 rules_pitest_dependencies()
 
@@ -40,7 +40,7 @@ load("@rules_jvm_external//:setup.bzl", "rules_jvm_external_setup")
 
 rules_jvm_external_setup()
 
-load("@com_bookingcom_rules_pitest//pitest:deps.bzl", pitest_maven_dependencies = "maven_dependencies")
+load("@rules_pitest//pitest:deps.bzl", pitest_maven_dependencies = "maven_dependencies")
 
 pitest_maven_dependencies()
 
