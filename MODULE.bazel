@@ -1,7 +1,7 @@
 "Bazel dependencies"
 
 module(
-    name = "com_bookingcom_rules_pitest",
+    name = "rules_pitest",
     version = "0.0.0",
     compatibility_level = 1,
 )
