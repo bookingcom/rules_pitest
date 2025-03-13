@@ -1,6 +1,6 @@
-load("@rules_pitest//pitest:defs.bzl", "java_pitest_test")
 load("@contrib_rules_jvm//java:defs.bzl", "java_junit5_test")
 load("@rules_java//java:defs.bzl", "java_library")
+load("@rules_pitest//pitest:defs.bzl", "java_pitest_test")
 
 # gazelle:java_module_granularity module
 # gazelle:java_test_mode file

@@ -1,5 +1,4 @@
 bazel_dep(name = "rules_pitest", version = "0.0.0")
-
 local_path_override(
     module_name = "rules_pitest",
     path = "../..",
@@ -10,7 +9,6 @@ bazel_dep(name = "rules_jvm_external", version = "6.0")
 bazel_dep(name = "contrib_rules_jvm", version = "0.24.0")
 
 maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
-
 maven.install(
     name = "maven",
     artifacts = [
@@ -29,7 +27,6 @@ maven.install(
     fetch_sources = True,
     lock_file = "//:maven_install.json",
 )
-
 use_repo(
     maven,
     "maven",
